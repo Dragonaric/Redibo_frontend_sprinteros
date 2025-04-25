@@ -94,7 +94,7 @@ export default function ViewCarsPage() {
   const handleDelete = async (carId: number) => {
     try {
       // Llamada a la API para eliminar el vehículo
-      await axios.delete(`http://localhost:4000/api/vehiculo/${carId}`); 
+      await axios.delete(`https://redibo-backend-sprinteros1.onrender.com/api/vehiculo/${carId}`); 
       // Una vez eliminado correctamente, actualizamos el estado local
       setCars((prev) => prev.filter((car) => car.id !== carId));
       // Opcional: Mostrar mensaje de éxito

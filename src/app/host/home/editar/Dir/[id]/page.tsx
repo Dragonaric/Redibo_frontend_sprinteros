@@ -25,7 +25,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
-const API_URL = "http://localhost:4000/api";
+const API_URL = "https://redibo-backend-sprinteros1.onrender.com/api";
 
 interface Option {
   id: number;

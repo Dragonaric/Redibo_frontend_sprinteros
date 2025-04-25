@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // URL base del endpoint para imágenes
-const API_URL = "http://localhost:4000/api/v2/images";
+const API_URL = "https://redibo-backend-sprinteros1.onrender.com/api/v2/images";
 
 export interface Image {
     id: number;
