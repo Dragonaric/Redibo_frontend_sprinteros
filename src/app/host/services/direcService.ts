@@ -31,9 +31,10 @@ export async function getCountries(): Promise<Country[]> {
 
         return transformedData;
     } catch (error: unknown) {
-        console.error('Error fetching cities:', (error as any)?.response?.data || (error as Error).message);
-        throw new Error("Error al obtener las ciudades"); //👈 corrijo también el mensaje
-      }      
+        const typedError = error as Error & { response?: { data?: any } };
+        console.error('Error fetching country:', typedError.response?.data || typedError.message);
+        throw new Error("Error al obtener las paises");
+      }            
 }
 
 interface BackendCity {
@@ -63,8 +64,10 @@ export async function getCities(): Promise<City[]> {
   
       return transformedData;
     } catch (error: unknown) {
-      console.error('Error fetching cities:', (error as any)?.response?.data || (error as Error).message);
-      throw new Error("Error al obtener las ciudades");
-    }
+        const typedError = error as Error & { response?: { data?: any } };
+        console.error('Error fetching cities:', typedError.response?.data || typedError.message);
+        throw new Error("Error al obtener las ciudades");
+      }
+      
   }
   

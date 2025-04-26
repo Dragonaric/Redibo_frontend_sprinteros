@@ -129,24 +129,20 @@ const CaracteristicasPage: React.FC = () => {
         });
   
       } catch (err: unknown) {
-        const error = err as Error & { config?: any; response?: { data?: { message?: string } } };
+        const error = err as Error & { config?: { url?: string }, response?: { data?: { message?: string } } };
         console.error("Error completo:", error);
         console.error("URL solicitada:", error.config?.url);
         const errorMsg = error.response?.data?.message || error.message || "No se pudieron cargar las características del vehículo";
         setError(errorMsg);
-      }finally {
+      } finally {
         setIsLoading(false);
-      }
+      }      
     };
   
     fetchCaracteristicas();
   }, [vehiculoId]);
 
   // Validación en tiempo real cuando cambian los valores
-  useEffect(() => {
-    validateForm();
-  }, [formData]);
-
   const validateForm = () => {
     const errors: ValidationErrors = {};
     
@@ -180,6 +176,9 @@ const CaracteristicasPage: React.FC = () => {
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
+  useEffect(() => {
+    validateForm();
+  }, [formData]);
 
   const handleCombustibleChange = (id: string) => {
     setTouchedFields({...touchedFields, combustibles: true});

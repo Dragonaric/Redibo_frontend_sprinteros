@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -50,8 +50,7 @@ export default function InputImagen() {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
   // Función para actualizar el contexto de forma segura
-  const updateContextSafely = () => {
-    // Verificar si algún valor realmente cambió
+  const updateContextSafely = useCallback(() => {
     const currentData = {
       mainImage,
       secondaryImage1,
@@ -91,8 +90,7 @@ export default function InputImagen() {
       estado: "disponible",
       descripcion
     });
-  };
-
+  },[mainImage, secondaryImage1, secondaryImage2, mantenimientos, precio, descripcion]);
   // Inicializa los estados desde el contexto cuando cambia finalizacion
   useEffect(() => {
     if (finalizacion) {
