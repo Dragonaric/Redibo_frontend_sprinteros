@@ -72,7 +72,6 @@ const EditarDireccionPage: React.FC = () => {
   const [nombrePais, setNombrePais] = useState<string>("");
   const [nombreCiudad, setNombreCiudad] = useState<string>("");
   const [nombreProvincia, setNombreProvincia] = useState<string>("");
-  
   // Cargar datos iniciales: todos los países y datos del carro
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -163,12 +162,15 @@ const EditarDireccionPage: React.FC = () => {
           numCasa: datosCarro.num_casa || ""
         });
 
-      } catch (err) {
-        console.error("Error al cargar datos del vehículo:", err);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("Error al cargar datos del vehículo:", err.message);
+        } else {
+          console.error("Error al cargar datos del vehículo:", err);
+        }
         setError("Error al cargar los datos del vehículo");
-      } finally {
-        setIsLoading(false);
       }
+      
     };
 
     fetchInitialData();
@@ -440,7 +442,7 @@ const EditarDireccionPage: React.FC = () => {
     console.log(`Enviando a: ${API_URL}/carro/direccion/${carId}`);
     
     try {
-      const response = await axios.put(
+      await axios.put(
         `${API_URL}/carro/direccion/${carId}`, 
         datosParaEnviar,
         {
@@ -454,16 +456,20 @@ const EditarDireccionPage: React.FC = () => {
       
       // Redirigir después de un breve retraso
       setTimeout(() => router.push("/host"), 1500);
-    } catch (err: any) {
+    } catch (err: unknown) { // 👈 Aquí cambiamos any por unknown
       console.error("Error al actualizar la dirección:", err);
-      
-      // Extraer mensaje de error detallado si está disponible
-      const errorMessage = 
-        err.response?.data?.mensaje || 
-        err.response?.data?.error || 
-        err.message || 
-        "Error al guardar los cambios";
-      
+    
+      let errorMessage = "Error al guardar los cambios";
+    
+      if (axios.isAxiosError(err)) {
+        errorMessage = err.response?.data?.mensaje || 
+                       err.response?.data?.error || 
+                       err.message || 
+                       "Error de conexión con el servidor";
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+    
       setError(`Error: ${errorMessage}`);
     } finally {
       setIsSaving(false);

@@ -30,10 +30,10 @@ export async function getCountries(): Promise<Country[]> {
         }));
 
         return transformedData;
-    } catch (error: any) {
-        console.error('Error fetching countries:', error.response?.data || error.message);
-        throw new Error("Error al obtener los países");
-    }
+    } catch (error: unknown) {
+        console.error('Error fetching cities:', (error as any)?.response?.data || (error as Error).message);
+        throw new Error("Error al obtener las ciudades"); //👈 corrijo también el mensaje
+      }      
 }
 
 interface BackendCity {
@@ -48,23 +48,23 @@ export interface City {
 }
 export async function getCities(): Promise<City[]> {
     try {
-        const response = await axios.get<BackendCity[]>(`${API_URL}/cities`); // La respuesta es un array de BackendCity
-
-        // Verificar si la respuesta es un array válido y no está vacía
-        if (!Array.isArray(response.data) || response.data.length === 0) {
-            console.warn("No cities data received from the backend.");
-            return []; // Return an empty array
-        }
-
-        const transformedData: City[] = response.data.map(backendCity => ({
-            id: backendCity.id,
-            name: backendCity.nombre, // Mapear 'nombre' -> 'name'
-            countryId: backendCity.id_pais,
-        }));
-
-        return transformedData;
-    } catch (error: any) {
-        console.error('Error fetching cities:', error.response?.data || error.message);
-        throw new Error("Error al obtener los países");
+      const response = await axios.get<BackendCity[]>(`${API_URL}/cities`);
+  
+      if (!Array.isArray(response.data) || response.data.length === 0) {
+        console.warn("No cities data received from the backend.");
+        return [];
+      }
+  
+      const transformedData: City[] = response.data.map(backendCity => ({
+        id: backendCity.id,
+        name: backendCity.nombre,
+        countryId: backendCity.id_pais,
+      }));
+  
+      return transformedData;
+    } catch (error: unknown) {
+      console.error('Error fetching cities:', (error as any)?.response?.data || (error as Error).message);
+      throw new Error("Error al obtener las ciudades");
     }
-}
+  }
+  

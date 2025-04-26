@@ -118,7 +118,7 @@ export default function InputImagen() {
         updatingFromContextRef.current = false;
       }
     }
-  }, [finalizacion]);
+  }, [finalizacion, mantenimientos, precio, descripcion]);
 
   // Efecto para actualizar el contexto cuando cambien los valores locales
   useEffect(() => {
@@ -129,7 +129,7 @@ export default function InputImagen() {
     }, 0);
     
     return () => clearTimeout(timeout);
-  }, [mainImage, secondaryImage1, secondaryImage2, mantenimientos, precio, descripcion]);
+  }, [mainImage, secondaryImage1, secondaryImage2, mantenimientos, precio, descripcion, updateContextSafely]);
 
   // Efecto para validación del formulario
   useEffect(() => {
@@ -155,11 +155,18 @@ export default function InputImagen() {
     try {
       await submitForm();
       return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      let message = "Error desconocido";
+  
+      if (error instanceof Error) {
+        message = error.message;
+      }
+  
       console.error("Error al enviar el formulario:", error);
-      return { success: false, error: error.message || "Error desconocido" };
+      return { success: false, error: message };
     }
   };
+  
 
   return (
     <div className="p-6 flex flex-col items-start min-h-screen bg-gray-100">

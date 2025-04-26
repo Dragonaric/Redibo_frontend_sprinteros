@@ -25,10 +25,18 @@ export async function getImagesByCarId(carId: number): Promise<GetImagesResponse
       params: { carId }
     });
     return response.data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error al obtener imágenes:', error);
-    throw new Error(error.response?.data?.message || 'Error al obtener imágenes');
+  
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || 'Error al obtener imágenes');
+    } else if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('Error desconocido al obtener imágenes');
+    }
   }
+  
 }
 
 // Puedes agregar funciones para crear, actualizar o eliminar imágenes

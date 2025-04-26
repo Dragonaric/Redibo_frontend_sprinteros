@@ -34,8 +34,15 @@ try {
     }));
 
     return transformed;
-} catch (error: any) {
-    console.error("Error al obtener características principales:", error.response?.data || error.message);
+} catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+        console.error("Error al obtener características principales:", error.response?.data || error.message);
+    } else if (error instanceof Error) {
+        console.error("Error al obtener características principales:", error.message);
+    } else {
+        console.error("Error desconocido al obtener características principales");
+    }
     throw new Error("No se pudieron obtener los datos principales");
 }
+
 }
