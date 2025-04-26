@@ -3,8 +3,6 @@ import axios from "axios";
 // Define la URL base para las peticiones
 const API_URL = "https://redibo-backend-sprinteros1.onrender.com/api";
 
-
-
 interface BackendCountry {
     id: number;
     nombre: string;  // Nombre en el backend
