@@ -111,9 +111,13 @@ export default function InputImagen() {
     try {
       await submitForm();
       return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      let message = "Error desconocido";
+      if (error instanceof Error) {
+        message = error.message;
+      }
       console.error("Error al enviar el formulario:", error);
-      return { success: false, error: error.message || "Error desconocido" };
+      return { success: false, error: message };
     }
   };
 
@@ -126,21 +130,23 @@ export default function InputImagen() {
       </Link>
 
       <h1 className="text-4xl font-bold mb-6">Cargar Imágenes de tu vehículo:</h1>
-      <p className="font-medium mb-4">Debe cargar obligatoriamente tres imágenes: <span className="text-red-600">*</span></p>
+      <p className="font-medium mb-4">
+        Debe cargar obligatoriamente tres imágenes: <span className="text-red-600">*</span>
+      </p>
 
       <div className="w-full max-w-5xl px-9 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <CampoImagen image={mainImage} onImageChange={setMainImage} error={mainImageError} setError={setMainImageError}/>
-          <CampoImagen image={secondaryImage1} onImageChange={setSecondaryImage1} error={secondaryImage1Error} setError={setSecondaryImage1Error}/>
-          <CampoImagen image={secondaryImage2} onImageChange={setSecondaryImage2} error={secondaryImage2Error} setError={setSecondaryImage2Error}/>
+          <CampoImagen image={mainImage} onImageChange={setMainImage} error={mainImageError} setError={setMainImageError} />
+          <CampoImagen image={secondaryImage1} onImageChange={setSecondaryImage1} error={secondaryImage1Error} setError={setSecondaryImage1Error} />
+          <CampoImagen image={secondaryImage2} onImageChange={setSecondaryImage2} error={secondaryImage2Error} setError={setSecondaryImage2Error} />
         </div>
 
-        <CampoMantenimientos mantenimientos={mantenimientos} setMantenimientos={setMantenimientos} error={mantenimientosError} setError={setMantenimientosError}/>
-        <CampoPrecio precio={precio} setPrecio={setPrecio} error={precioError} setError={setPrecioError}/>
-        <CampoDescripcion descripcion={descripcion} setDescripcion={setDescripcion} error={descripcionError} setError={setDescripcionError}/>
+        <CampoMantenimientos mantenimientos={mantenimientos} setMantenimientos={setMantenimientos} error={mantenimientosError} setError={setMantenimientosError} />
+        <CampoPrecio precio={precio} setPrecio={setPrecio} error={precioError} setError={setPrecioError} />
+        <CampoDescripcion descripcion={descripcion} setDescripcion={setDescripcion} error={descripcionError} setError={setDescripcionError} />
       </div>
 
-      <BotonesFormulario isFormValid={isFormValid} onSubmit={handleSubmit}/>
+      <BotonesFormulario isFormValid={isFormValid} onSubmit={handleSubmit} />
     </div>
   );
 }
