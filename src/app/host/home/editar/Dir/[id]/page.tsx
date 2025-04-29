@@ -161,6 +161,7 @@ const EditarDireccionPage: React.FC = () => {
           calle: datosCarro.calle || "",
           numCasa: datosCarro.num_casa || ""
         });
+        setIsLoading(false);
 
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -169,6 +170,7 @@ const EditarDireccionPage: React.FC = () => {
           console.error("Error al cargar datos del vehículo:", err);
         }
         setError("Error al cargar los datos del vehículo");
+        setIsLoading(false);
       }
       
     };
@@ -298,6 +300,7 @@ const EditarDireccionPage: React.FC = () => {
         setProvincias(response.data);
       } else {
         setProvincias([]);
+        setProvinciaError("No se encontraron provincias para esta ciudad");
       }
     } catch (err) {
       console.error("Error al cargar provincias:", err);
